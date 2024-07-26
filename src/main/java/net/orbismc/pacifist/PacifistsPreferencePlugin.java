@@ -43,11 +43,10 @@ public final class PacifistsPreferencePlugin extends JavaPlugin {
                     }
 
                     if (PacifistPreferenceService.isPvpEnabled(player)) {
-                        Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(255, 0, 0), 1.0F);
-                        player.getWorld().spawnParticle(Particle.DUST, player.getLocation(), 50, 0.1, 0.01, 0.1, 0.01, dustOptions);
+                        player.getWorld().spawnParticle(Particle.RAID_OMEN, player.getLocation(), 1, 0.001, 0.001, 0.001, 0.005);
                     }
                 }
-            }, 0, 10);
+            }, 0, 3);
         }
     }
 
