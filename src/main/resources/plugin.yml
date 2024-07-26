@@ -1,0 +1,8 @@
+name: PacifistsPreference
+version: '${version}'
+main: net.orbismc.pacifist.PacifistsPreferencePlugin
+api-version: '1.21'
+commands:
+  pvp:
+    description: Toggle PvP on or off
+    usage: /pvp [on|off]
