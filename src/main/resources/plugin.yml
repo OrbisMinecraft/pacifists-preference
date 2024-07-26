@@ -1,5 +1,13 @@
 name: PacifistsPreference
 version: '${version}'
+description: 'A PvP-toggle plugin for distinguished gentlemen'
+authors:
+  - 'OrbisMC'
+contributors:
+  - 'ArousedAragorn aka Luis Michaelis'
+  - 'XanderStuff'
+website: https://github.com/OrbisMinecraft/pacifists-preference
+prefix: "PacifistsPreference"
 main: net.orbismc.pacifist.PacifistsPreferencePlugin
 api-version: '1.21'
 commands:
