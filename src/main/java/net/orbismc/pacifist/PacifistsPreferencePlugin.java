@@ -6,6 +6,8 @@ import net.orbismc.pacifist.commands.PvpCommand;
 import net.orbismc.pacifist.config.PacifistPreferenceConfig;
 import net.orbismc.pacifist.listener.CombatEventListener;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.Particle;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -32,6 +34,21 @@ public final class PacifistsPreferencePlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new CombatEventListener(), this);
         this.getCommand("pvp").setExecutor(new PvpCommand());
         getLogger().info("Loaded.");
+
+        if (config.showParticles) {
+            getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> {
+                for (var player : Bukkit.getOnlinePlayers()) {
+                    if (player.isInvisible()) {
+                        continue;
+                    }
+
+                    if (PacifistPreferenceService.isPvpEnabled(player)) {
+                        Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(255, 0, 0), 1.0F);
+                        player.getWorld().spawnParticle(Particle.DUST, player.getLocation(), 50, 0.1, 0.01, 0.1, 0.01, dustOptions);
+                    }
+                }
+            }, 0, 10);
+        }
     }
 
     public PacifistPreferenceConfig getConfiguration() {
