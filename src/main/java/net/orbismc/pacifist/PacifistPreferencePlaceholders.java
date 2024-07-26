@@ -7,11 +7,13 @@ import org.jetbrains.annotations.Nullable;
 
 public class PacifistPreferencePlaceholders extends PlaceholderExpansion {
     private final PacifistsPreferencePlugin plugin;
-    private final String placeholderEnabled = "\uD83D\uDDE1";
-    private final String placeholderDisabled = "";
+    private final String placeholderEnabled;
+    private final String placeholderDisabled;
 
     public PacifistPreferencePlaceholders(PacifistsPreferencePlugin plugin) {
         this.plugin = plugin;
+        this.placeholderDisabled = plugin.getConfiguration().placeholderPvpDisabled;
+        this.placeholderEnabled = plugin.getConfiguration().placeholderPvpEnabled;
     }
 
     @Override
