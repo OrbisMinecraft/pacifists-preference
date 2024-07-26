@@ -1,3 +1,4 @@
 placeholderPvpEnabled: "🗡"
 placeholderPvpDisabled: ""
 showParticles: true
+showGlowing: false

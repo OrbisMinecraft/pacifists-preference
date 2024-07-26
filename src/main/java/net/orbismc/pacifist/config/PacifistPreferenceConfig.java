@@ -18,6 +18,7 @@ public final class PacifistPreferenceConfig {
 	public String placeholderPvpEnabled = "\uD83D\uDDE1";
 	public String placeholderPvpDisabled = "";
 	public boolean showParticles = true;
+	public boolean showGlowing = false;
 
 	/**
 	 * Loads the configuration from a file.

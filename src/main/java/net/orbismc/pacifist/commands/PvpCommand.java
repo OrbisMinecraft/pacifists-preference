@@ -2,12 +2,15 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 package net.orbismc.pacifist.commands;
 
+import net.orbismc.pacifist.PacifistPreferencePlaceholders;
 import net.orbismc.pacifist.PacifistPreferenceService;
+import net.orbismc.pacifist.PacifistsPreferencePlugin;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public final class PvpCommand implements CommandExecutor {
     @Override
@@ -29,7 +32,10 @@ public final class PvpCommand implements CommandExecutor {
         PacifistPreferenceService.setPvpEnabled(player, toggle);
 
         player.sendMessage(ChatColor.RED + "[Pacifist's Preference]" + ChatColor.RESET + " PvP is now " + (toggle ? ChatColor.RED + "ON" : ChatColor.GREEN + "OFF"));
-        player.setGlowing(toggle);
+
+        if (JavaPlugin.getPlugin(PacifistsPreferencePlugin.class).getConfiguration().showGlowing) {
+            player.setGlowing(toggle);
+        }
         return true;
     }
 }
