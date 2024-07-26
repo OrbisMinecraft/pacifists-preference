@@ -15,11 +15,16 @@ repositories {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
+    maven {
+        name = "PlaceholderAPI"
+        url = "https://repo.extendedclip.com/content/repositories/placeholderapi/"
+    }
 }
 
 dependencies {
     compileOnly "org.spigotmc:spigot-api:1.21-R0.1-SNAPSHOT"
     compileOnly "org.jetbrains:annotations:24.1.0"
+    compileOnly "me.clip:placeholderapi:2.11.6"
 }
 
 def targetJavaVersion = 21
