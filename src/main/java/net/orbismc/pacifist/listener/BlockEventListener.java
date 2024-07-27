@@ -68,7 +68,6 @@ public final class BlockEventListener implements Listener {
         var world = block.getLocation().getWorld();
         if (event.getBlockPlaced().getBlockData() instanceof Bed) {
             if (world.isBedWorks()) {
-                event.getPlayer().sendMessage("-> Beds work in this dimension.");
                 return;
             }
 
