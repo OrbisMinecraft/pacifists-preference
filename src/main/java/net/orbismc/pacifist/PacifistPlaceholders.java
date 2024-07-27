@@ -1,3 +1,5 @@
+// Copyright © 2024. OrbisMC Contributors
+// SPDX-License-Identifier: AGPL-3.0-only
 package net.orbismc.pacifist;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -5,12 +7,12 @@ import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PacifistPreferencePlaceholders extends PlaceholderExpansion {
-    private final PacifistsPreferencePlugin plugin;
+public class PacifistPlaceholders extends PlaceholderExpansion {
+    private final PacifistsPreference plugin;
     private final String placeholderEnabled;
     private final String placeholderDisabled;
 
-    public PacifistPreferencePlaceholders(PacifistsPreferencePlugin plugin) {
+    public PacifistPlaceholders(@NotNull PacifistsPreference plugin) {
         this.plugin = plugin;
         this.placeholderDisabled = plugin.getConfiguration().placeholderPvpDisabled;
         this.placeholderEnabled = plugin.getConfiguration().placeholderPvpEnabled;
@@ -47,6 +49,6 @@ public class PacifistPreferencePlaceholders extends PlaceholderExpansion {
             return "";
         }
 
-        return PacifistPreferenceService.isPvpEnabled(onlinePlayer) ? placeholderEnabled : placeholderDisabled;
+        return PacifistService.isPvpEnabled(onlinePlayer) ? placeholderEnabled : placeholderDisabled;
     }
 }

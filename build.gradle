@@ -2,8 +2,10 @@ plugins {
     id 'java'
 }
 
+def gitCommitHash = 'git rev-parse --verify --short HEAD'.execute().text.trim()
+
 group = 'net.orbismc.pacifist'
-version = '0.0.2'
+version = '0.0.3+git.' + gitCommitHash
 
 repositories {
     mavenCentral()

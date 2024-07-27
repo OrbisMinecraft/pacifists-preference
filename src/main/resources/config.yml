@@ -1,4 +1,62 @@
+# The block material types to be blocked from being placed
+# in a radius around PvP-disabled players. The value here
+# is the radius to be checked for each material type. See
+# [1] for a list of possible material values.
+#
+# Example:
+#   LAVA_BUCKET: 10
+#
+# Means:
+#  Disallow placing LAVA_BUCKETs within a 10-block radius
+#  around players with PvP disabled.
+#
+# [1]: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+blockedMaterials:
+  LAVA_BUCKET: 10
+  FIRE: 6
+
+# Defines how potion effects are checked. "all" means, that
+# a potion must contain only blocked effects in order to be
+# blocked, while "any" means that a potion will be blocked if
+# a single one of its effects is blocked.
+blockPotionEffectRule: "any"
+
+# A list of potion effects to be blocked according to
+# "blockPotionEffectRule". See [2] for a list of possible
+# effect values.
+#
+# [2]: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/potion/PotionEffectType.html
+blockedPotionEffects:
+  - SLOWNESS
+  - MINING_FATIGUE
+  - INSTANT_DAMAGE
+  - NAUSEA
+  - BLINDNESS
+  - HUNGER
+  - WEAKNESS
+  - POISON
+  - WITHER
+  - LEVITATION
+  - UNLUCK
+  - BAD_OMEN
+  - DARKNESS
+  - TRIAL_OMEN
+  - RAID_OMEN
+  - INFESTED
+
+# The string to insert into PlaceholderAPI templates using
+# %PacifistsPreference% if the player's PvP is enabled.
 placeholderPvpEnabled: "🗡"
+
+# The string to insert into PlaceholderAPI templates using
+# %PacifistsPreference% if the player's PvP is disabled.
 placeholderPvpDisabled: ""
+
+# Whether to show particles at player positions if they have
+# their PvP enabled.
 showParticles: true
+
+# Whether to make players glowing if they have PvP enabled.
+# Note: The glowing effect is permanent, unless this option
+#       is activated and `/pvp off` is issued.
 showGlowing: false

@@ -8,7 +8,7 @@ contributors:
   - 'XanderStuff'
 website: https://github.com/OrbisMinecraft/pacifists-preference
 prefix: "PacifistsPreference"
-main: net.orbismc.pacifist.PacifistsPreferencePlugin
+main: net.orbismc.pacifist.PacifistsPreference
 api-version: '1.21'
 softdepend: [PlaceholderAPI]
 commands:
