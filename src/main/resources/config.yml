@@ -13,7 +13,16 @@
 # [1]: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
 blockedMaterials:
   LAVA_BUCKET: 10
+  PUFFERFISH_BUCKET: 10
   FIRE: 6
+  MAGMA_BLOCK: 3
+  CAMPFIRE: 3
+  SOUL_CAMPFIRE: 3
+  ANVIL: 8
+  CHIPPED_ANVIL: 8
+  DAMAGED_ANVIL: 8
+  POWDER_SNOW_BUCKET: 6
+
   # Hard-coded special case handling for the affected dimension
   WHITE_BED: 30
   ORANGE_BED: 30
