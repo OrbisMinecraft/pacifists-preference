@@ -5,11 +5,11 @@ package net.orbismc.pacifist.listener;
 import net.orbismc.pacifist.PacifistService;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -39,7 +39,7 @@ public final class ExplosiveEventListener implements Listener {
             return;
         }
 
-        Player attacker = PacifistService.getAttackingPlayerFromOriginEntity(cause);
+        OfflinePlayer attacker = PacifistService.getAttackingPlayerFromOriginEntity(cause);
 
         // If the TNT block was primed by something other than a player or projectile, the
         // event is allowed to go through.

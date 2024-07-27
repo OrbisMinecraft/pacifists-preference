@@ -5,14 +5,18 @@ package net.orbismc.pacifist;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public final class PacifistMessaging {
-    public static void sendAttackDenialMessage(Player attacker, Player target, Entity attackerProxy, Entity targetProxy) {
+    public static void sendAttackDenialMessage(OfflinePlayer attacker, OfflinePlayer target, Entity attackerProxy, Entity targetProxy) {
+        if (!attacker.isOnline()) {
+            return;
+        }
+
         var message = "%s can't attack %s because %s have PvP disabled [/pvp]".formatted(
                 getAttackerDescriptor(attackerProxy),
                 getTargetDescriptor(targetProxy),
@@ -21,12 +25,15 @@ public final class PacifistMessaging {
 
         var text = new TextComponent(message);
         text.setColor(ChatColor.RED);
-        text.setBold(true);
 
-        attacker.spigot().sendMessage(ChatMessageType.ACTION_BAR, text);
+        attacker.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, text);
     }
 
-    public static void sendGenericDenialMessage(@NotNull Player attacker, Entity attackerProxy, String msg) {
+    public static void sendGenericDenialMessage(@NotNull OfflinePlayer attacker, Entity attackerProxy, String msg) {
+        if (!attacker.isOnline()) {
+            return;
+        }
+
         var message = "%s %s [/pvp]".formatted(
                 getAttackerDescriptor(attackerProxy),
                 msg
@@ -34,9 +41,8 @@ public final class PacifistMessaging {
 
         var text = new TextComponent(message);
         text.setColor(ChatColor.RED);
-        text.setBold(true);
 
-        attacker.spigot().sendMessage(ChatMessageType.ACTION_BAR, text);
+        attacker.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, text);
     }
 
     @Contract(pure = true)
@@ -57,7 +63,7 @@ public final class PacifistMessaging {
         };
     }
 
-    private static @NotNull String getReasonDescriptor(Player attacker, Player target) {
+    private static @NotNull String getReasonDescriptor(OfflinePlayer attacker, OfflinePlayer target) {
         var attackerPvpEnabled = PacifistService.isPvpEnabled(attacker);
         var targetPvpEnabled = PacifistService.isPvpEnabled(target);
 

@@ -4,7 +4,7 @@ package net.orbismc.pacifist.listener;
 
 import net.orbismc.pacifist.PacifistMessaging;
 import net.orbismc.pacifist.PacifistService;
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -14,13 +14,13 @@ public final class CombatEventListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         // Determine the party doing the damaging
-        Player attacker = PacifistService.getAttackingPlayerFromOriginEntity(event.getDamager());
+        OfflinePlayer attacker = PacifistService.getAttackingPlayerFromOriginEntity(event.getDamager());
         if (attacker == null) {
             return;
         }
 
         // Determine the party being damaged
-        Player target = PacifistService.getDamagedPlayerFromOriginEntity(event.getEntity());
+        OfflinePlayer target = PacifistService.getDamagedPlayerFromOriginEntity(event.getEntity());
         if (target == null) {
             return;
         }

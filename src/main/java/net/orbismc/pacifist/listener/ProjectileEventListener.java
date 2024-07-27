@@ -5,6 +5,7 @@ package net.orbismc.pacifist.listener;
 import net.orbismc.pacifist.PacifistMessaging;
 import net.orbismc.pacifist.PacifistService;
 import net.orbismc.pacifist.config.PacifistConfig;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,7 +29,7 @@ public final class ProjectileEventListener implements Listener {
         this.rule = config.blockPotionEffectRule;
     }
 
-    public static Collection<LivingEntity> applyAreaOfEffect(final @NotNull Player attacker, final @NotNull Collection<LivingEntity> affected) {
+    public static Collection<LivingEntity> applyAreaOfEffect(final @NotNull OfflinePlayer attacker, final @NotNull Collection<LivingEntity> affected) {
         for (var iterator = affected.iterator(); iterator.hasNext(); ) {
             var target = PacifistService.getDamagedPlayerFromOriginEntity(iterator.next());
             if (target == null) {

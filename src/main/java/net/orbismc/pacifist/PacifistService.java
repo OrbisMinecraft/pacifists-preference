@@ -3,7 +3,9 @@
 package net.orbismc.pacifist;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
@@ -17,13 +19,18 @@ public class PacifistService {
     private static final NamespacedKey PACIFIST_PREFERENCE_SETTING = new NamespacedKey(PacifistsPreference.getPlugin(PacifistsPreference.class), "pvp_enabled");
     private static final NamespacedKey PACIFIST_PREFERENCE_OWNER = new NamespacedKey(PacifistsPreference.getPlugin(PacifistsPreference.class), "owner");
 
-    public static boolean isPvpEnabled(Player player) {
-        var container = player.getPersistentDataContainer();
+    public static boolean isPvpEnabled(OfflinePlayer player) {
+        if (!player.isOnline()) {
+            return false;
+        }
+
+        var onlinePlayer = player.getPlayer();
+        var container = onlinePlayer.getPersistentDataContainer();
         Boolean setting = container.get(PACIFIST_PREFERENCE_SETTING, PersistentDataType.BOOLEAN);
         return setting != null && setting;
     }
 
-    public static boolean isPvpEnabled(Player playerA, Player playerB) {
+    public static boolean isPvpEnabled(OfflinePlayer playerA, OfflinePlayer playerB) {
         return isPvpEnabled(playerA) && isPvpEnabled(playerB);
     }
 
@@ -32,8 +39,12 @@ public class PacifistService {
         container.set(PACIFIST_PREFERENCE_SETTING, PersistentDataType.BOOLEAN, enabled);
     }
 
-    public static void setOwnerTag(Entity entity, Player player) {
-        if (entity instanceof Player) {
+    public static void setOwnerTag(Entity entity, OfflinePlayer player) {
+        if (!player.isOnline()) {
+            return;
+        }
+
+        if (entity instanceof OfflinePlayer) {
             throw new RuntimeException("NEVER setting owner tag on a player: " + entity);
         }
 
@@ -41,7 +52,11 @@ public class PacifistService {
         container.set(PACIFIST_PREFERENCE_OWNER, PersistentDataType.STRING, player.getUniqueId().toString());
     }
 
-    public static @Nullable Player getOwnerTag(@NotNull Entity entity) {
+    public static boolean isPvpDisabledPlayerInRadius(@NotNull Location loc, double radius, OfflinePlayer self) {
+        return loc.getWorld().getNearbyEntities(loc, radius, radius, radius).stream().filter(entity -> !entity.equals(self)).anyMatch(entity -> entity instanceof Player player && !isPvpEnabled(player, self));
+    }
+
+    public static @Nullable OfflinePlayer getOwnerTag(@NotNull Entity entity) {
         var container = entity.getPersistentDataContainer();
         var owner = container.get(PACIFIST_PREFERENCE_OWNER, PersistentDataType.STRING);
         return owner != null ? Bukkit.getPlayer(UUID.fromString(owner)) : null;
@@ -51,7 +66,7 @@ public class PacifistService {
      * @param entity The entity from an EntityDamageByEntityEvent
      * @return The player doing the damaging or null of it's not a player
      */
-    public static @Nullable Player getAttackingPlayerFromOriginEntity(@NotNull Entity entity) {
+    public static @Nullable OfflinePlayer getAttackingPlayerFromOriginEntity(@NotNull Entity entity) {
         return switch (entity) {
             // Direct player-to-player damage
             case Player player -> player;
@@ -61,8 +76,8 @@ public class PacifistService {
         };
     }
 
-    public static @Nullable Player getDamagedPlayerFromOriginEntity(Entity entity) {
-        if (entity instanceof Player player) {
+    public static @Nullable OfflinePlayer getDamagedPlayerFromOriginEntity(Entity entity) {
+        if (entity instanceof OfflinePlayer player) {
             return player;
         }
 
@@ -71,7 +86,7 @@ public class PacifistService {
                 return null;
             }
 
-            if (!(tameable.getOwner() instanceof Player player)) {
+            if (!(tameable.getOwner() instanceof OfflinePlayer player)) {
                 return null;
             }
 
