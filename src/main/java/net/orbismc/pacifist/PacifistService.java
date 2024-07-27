@@ -6,9 +6,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataHolder;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,7 +42,7 @@ public class PacifistService {
         container.set(PACIFIST_PREFERENCE_SETTING, PersistentDataType.BOOLEAN, enabled);
     }
 
-    public static void setOwnerTag(Entity entity, OfflinePlayer player) {
+    public static void setOwnerTag(PersistentDataHolder entity, OfflinePlayer player) {
         if (!player.isOnline()) {
             return;
         }
@@ -52,14 +55,32 @@ public class PacifistService {
         container.set(PACIFIST_PREFERENCE_OWNER, PersistentDataType.STRING, player.getUniqueId().toString());
     }
 
-    public static boolean isPvpDisabledPlayerInRadius(@NotNull Location loc, double radius, OfflinePlayer self) {
-        return loc.getWorld().getNearbyEntities(loc, radius, radius, radius).stream().filter(entity -> !entity.equals(self)).anyMatch(entity -> entity instanceof Player player && !isPvpEnabled(player, self));
+    public static void setOwnerTag(Block block, OfflinePlayer player) {
+        if (!player.isOnline()) {
+            return;
+        }
+
+        var plugin = PacifistsPreference.getPlugin(PacifistsPreference.class);
+        block.setMetadata(PACIFIST_PREFERENCE_OWNER.toString(), new FixedMetadataValue(plugin, player.getUniqueId().toString()));
     }
 
-    public static @Nullable OfflinePlayer getOwnerTag(@NotNull Entity entity) {
+    public static @Nullable OfflinePlayer getOwnerTag(@NotNull PersistentDataHolder entity) {
         var container = entity.getPersistentDataContainer();
         var owner = container.get(PACIFIST_PREFERENCE_OWNER, PersistentDataType.STRING);
         return owner != null ? Bukkit.getPlayer(UUID.fromString(owner)) : null;
+    }
+
+    public static @Nullable OfflinePlayer getOwnerTag(@NotNull Block block) {
+        if (!block.hasMetadata(PACIFIST_PREFERENCE_OWNER.toString())) {
+            return null;
+        }
+
+        String uuid = block.getMetadata(PACIFIST_PREFERENCE_OWNER.toString()).getFirst().asString();
+        return Bukkit.getOfflinePlayer(UUID.fromString(uuid));
+    }
+
+    public static boolean isPvpDisabledPlayerInRadius(@NotNull Location loc, double radius, OfflinePlayer self) {
+        return loc.getWorld().getNearbyEntities(loc, radius, radius, radius).stream().filter(entity -> !entity.equals(self)).anyMatch(entity -> entity instanceof Player player && !isPvpEnabled(player, self));
     }
 
     /**

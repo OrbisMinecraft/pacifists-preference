@@ -7,6 +7,7 @@ import net.orbismc.pacifist.PacifistService;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 // TODO: Players can push other players
@@ -41,6 +42,34 @@ public final class CombatEventListener implements Listener {
                 event.getDamager(),
                 event.getEntity()
         );
+
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onEntityDamagedByBlock(EntityDamageByBlockEvent event) {
+        var attacker = event.getDamager();
+        if (attacker == null) {
+            return;
+        }
+
+        var owner = PacifistService.getOwnerTag(event.getDamager());
+        if (owner == null) {
+            return;
+        }
+
+        var target = PacifistService.getDamagedPlayerFromOriginEntity(event.getEntity());
+        if (target == null) {
+            return;
+        }
+
+        if (owner.equals(target)) {
+            return;
+        }
+
+        if (PacifistService.isPvpEnabled(owner, target)) {
+            return;
+        }
 
         event.setCancelled(true);
     }

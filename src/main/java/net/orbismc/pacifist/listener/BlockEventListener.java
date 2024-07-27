@@ -59,29 +59,25 @@ public final class BlockEventListener implements Listener {
         event.setCancelled(true);
     }
 
+    private static boolean isSpecialBlock(@NotNull Material material) {
+        if (material.data.isAssignableFrom(Bed.class)) {
+            return true;
+        }
+
+        if (material == Material.RESPAWN_ANCHOR) {
+            return true;
+        }
+
+        return false;
+    }
+
     @EventHandler(ignoreCancelled = true)
     public void onBlockPlace(final @NotNull BlockPlaceEvent event) {
         var block = event.getBlockPlaced();
 
-        // Hardcoded checks for exploding blocks
-        // TODO: Make this nicer please, my brain can't handle it right now
-        var world = block.getLocation().getWorld();
-        if (event.getBlockPlaced().getBlockData() instanceof Bed) {
-            if (world.isBedWorks()) {
-                return;
-            }
-
-            if (!PacifistService.isPvpDisabledPlayerInRadius(block.getLocation(), blockedMaterials.get(block.getType()), event.getPlayer())) {
-                return;
-            }
-        } else if (block.getType() == Material.RESPAWN_ANCHOR) {
-            if (world.isRespawnAnchorWorks()) {
-                return;
-            }
-
-            if (!PacifistService.isPvpDisabledPlayerInRadius(block.getLocation(), blockedMaterials.get(block.getType()), event.getPlayer())) {
-                return;
-            }
+        // If the placed block is special, add an owner tag to it.
+        if (isSpecialBlock(block.getType())) {
+            PacifistService.setOwnerTag(block, event.getPlayer());
         }
 
         if (isAllowedToPlaceBlock(block.getType(), event.getPlayer(), event.getBlockPlaced().getLocation())) {
