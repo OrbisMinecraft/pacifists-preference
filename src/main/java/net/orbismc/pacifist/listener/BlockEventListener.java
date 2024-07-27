@@ -74,6 +74,9 @@ public final class BlockEventListener implements Listener {
             if (!PacifistService.isPvpDisabledPlayerInRadius(block.getLocation(), blockedMaterials.get(block.getType()), event.getPlayer())) {
                 return;
             }
+
+            event.setCancelled(true);
+            return;
         } else if (block.getType() == Material.RESPAWN_ANCHOR) {
             if (world.isRespawnAnchorWorks()) {
                 return;
@@ -82,6 +85,9 @@ public final class BlockEventListener implements Listener {
             if (!PacifistService.isPvpDisabledPlayerInRadius(block.getLocation(), blockedMaterials.get(block.getType()), event.getPlayer())) {
                 return;
             }
+
+            event.setCancelled(true);
+            return;
         }
 
         if (isAllowedToPlaceBlock(block.getType(), event.getPlayer(), event.getBlockPlaced().getLocation())) {
