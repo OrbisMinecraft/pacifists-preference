@@ -8,10 +8,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
-public final class PacifistCommand implements CommandExecutor {
+import java.util.List;
+
+public final class PacifistCommand implements CommandExecutor, TabCompleter {
     private final PacifistsPreference plugin;
 
     public PacifistCommand(final @NotNull PacifistsPreference plugin) {
@@ -42,5 +46,14 @@ public final class PacifistCommand implements CommandExecutor {
             player.setGlowing(toggle);
         }
         return true;
+    }
+
+    @Override
+    public @Unmodifiable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
+        if (args.length == 1) {
+            return List.of("on", "off");
+        }
+
+        return List.of();
     }
 }

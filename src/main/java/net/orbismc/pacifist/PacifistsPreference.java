@@ -42,7 +42,10 @@ public final class PacifistsPreference extends JavaPlugin {
 
         var command = this.getCommand("pvp");
         Objects.requireNonNull(command);
-        command.setExecutor(new PacifistCommand(this));
+
+        var commandHandler = new PacifistCommand(this);
+        command.setExecutor(commandHandler);
+        command.setTabCompleter(commandHandler);
 
         if (config.showParticles) {
             getServer().getScheduler().scheduleSyncRepeatingTask(this, this::spawnParticles, 0, 3);
