@@ -14,6 +14,25 @@
 blockedMaterials:
   LAVA_BUCKET: 10
   FIRE: 6
+  # Hard-coded special case handling for the affected dimension
+  WHITE_BED: 30
+  ORANGE_BED: 30
+  MAGENTA_BED: 30
+  LIGHT_BLUE_BED: 30
+  YELLOW_BED: 30
+  LIME_BED: 30
+  PINK_BED: 30
+  GRAY_BED: 30
+  LIGHT_GRAY_BED: 30
+  CYAN_BED: 30
+  PURPLE_BED: 30
+  BLUE_BED: 30
+  BROWN_BED: 30
+  GREEN_BED: 30
+  RED_BED: 30
+  BLACK_BED: 30
+  RESPAWN_ANCHOR: 30
+
 
 # Defines how potion effects are checked. "all" means, that
 # a potion must contain only blocked effects in order to be

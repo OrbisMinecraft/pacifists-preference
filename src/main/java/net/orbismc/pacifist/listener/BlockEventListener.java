@@ -7,6 +7,7 @@ import net.orbismc.pacifist.PacifistService;
 import net.orbismc.pacifist.config.PacifistConfig;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.data.type.Bed;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -60,7 +61,31 @@ public final class BlockEventListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onBlockPlace(final @NotNull BlockPlaceEvent event) {
-        if (isAllowedToPlaceBlock(event.getBlockPlaced().getType(), event.getPlayer(), event.getBlockPlaced().getLocation())) {
+        var block = event.getBlockPlaced();
+
+        // Hardcoded checks for exploding blocks
+        // TODO: Make this nicer please, my brain can't handle it right now
+        var world = block.getLocation().getWorld();
+        if (event.getBlockPlaced().getBlockData() instanceof Bed) {
+            if (world.isBedWorks()) {
+                event.getPlayer().sendMessage("-> Beds work in this dimension.");
+                return;
+            }
+
+            if (!PacifistService.isPvpDisabledPlayerInRadius(block.getLocation(), blockedMaterials.get(block.getType()), event.getPlayer())) {
+                return;
+            }
+        } else if (block.getType() == Material.RESPAWN_ANCHOR) {
+            if (world.isRespawnAnchorWorks()) {
+                return;
+            }
+
+            if (!PacifistService.isPvpDisabledPlayerInRadius(block.getLocation(), blockedMaterials.get(block.getType()), event.getPlayer())) {
+                return;
+            }
+        }
+
+        if (isAllowedToPlaceBlock(block.getType(), event.getPlayer(), event.getBlockPlaced().getLocation())) {
             return;
         }
 
