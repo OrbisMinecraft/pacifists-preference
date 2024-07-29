@@ -4,7 +4,7 @@ package net.orbismc.pacifist.listener;
 
 import net.orbismc.pacifist.PacifistMessaging;
 import net.orbismc.pacifist.PacifistService;
-import net.orbismc.pacifist.config.PacifistConfig;
+import net.orbismc.pacifist.PacifistsPreference;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.type.Bed;
@@ -15,17 +15,15 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-
 public final class BlockEventListener implements Listener {
-    private final HashMap<Material, Double> blockedMaterials;
+    private final PacifistsPreference plugin;
 
-    public BlockEventListener(final @NotNull PacifistConfig config) {
-        this.blockedMaterials = config.blockedMaterials;
+    public BlockEventListener(final @NotNull PacifistsPreference plugin) {
+        this.plugin = plugin;
     }
 
     public boolean isHarmfulBlock(Material material) {
-        return blockedMaterials.containsKey(material);
+        return plugin.config.blockedMaterials.containsKey(material);
     }
 
     private boolean isAllowedToPlaceBlock(Material material, Player player, Location location) {
@@ -38,7 +36,7 @@ public final class BlockEventListener implements Listener {
             return true;
         }
 
-        var radius = blockedMaterials.get(material);
+        var radius = plugin.config.blockedMaterials.get(material);
         var nearby = world.getNearbyEntities(location, radius, radius, radius, entity -> entity instanceof Player && !entity.equals(player));
 
         return nearby.stream().allMatch(entity -> PacifistService.isPvpEnabled(player, (Player) entity));
@@ -71,7 +69,7 @@ public final class BlockEventListener implements Listener {
                 return;
             }
 
-            if (!PacifistService.isPvpDisabledPlayerInRadius(block.getLocation(), blockedMaterials.get(block.getType()), event.getPlayer())) {
+            if (!PacifistService.isPvpDisabledPlayerInRadius(block.getLocation(), plugin.config.blockedMaterials.get(block.getType()), event.getPlayer())) {
                 return;
             }
 
@@ -82,7 +80,7 @@ public final class BlockEventListener implements Listener {
                 return;
             }
 
-            if (!PacifistService.isPvpDisabledPlayerInRadius(block.getLocation(), blockedMaterials.get(block.getType()), event.getPlayer())) {
+            if (!PacifistService.isPvpDisabledPlayerInRadius(block.getLocation(), plugin.config.blockedMaterials.get(block.getType()), event.getPlayer())) {
                 return;
             }
 

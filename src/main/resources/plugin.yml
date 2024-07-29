@@ -16,3 +16,7 @@ commands:
     description: Toggle PvP on or off
     usage: /pvp [on|off]
     permission: pacifistspreference.use
+  pvp-reload:
+    description: Reload Pacifist's Preference plugin configuration
+    usage: /pvp-reload
+    permission: pacifistspreference.reload

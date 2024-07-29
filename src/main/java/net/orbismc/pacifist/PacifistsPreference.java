@@ -3,6 +3,7 @@
 package net.orbismc.pacifist;
 
 import net.orbismc.pacifist.commands.PacifistCommand;
+import net.orbismc.pacifist.commands.PacifistReloadCommand;
 import net.orbismc.pacifist.config.PacifistConfig;
 import net.orbismc.pacifist.listener.*;
 import org.bukkit.Bukkit;
@@ -16,16 +17,14 @@ import java.util.logging.Logger;
 
 public final class PacifistsPreference extends JavaPlugin {
     public static Logger LOGGER;
-    private PacifistConfig config = new PacifistConfig();
+    public PacifistConfig config = new PacifistConfig();
 
     @Override
     public void onEnable() {
         LOGGER = getLogger();
-        try {
-            this.saveDefaultConfig();
 
-            final var configFile = new File(this.getDataFolder(), "config.yml");
-            this.config = PacifistConfig.load(configFile);
+        try {
+            this.reload();
         } catch (FileNotFoundException e) {
             throw new IllegalStateException("Failed to load configuration", e);
         }
@@ -36,8 +35,8 @@ public final class PacifistsPreference extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new CombatEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new ExplosiveEventListener(), this);
-        Bukkit.getPluginManager().registerEvents(new ProjectileEventListener(this.config), this);
-        Bukkit.getPluginManager().registerEvents(new BlockEventListener(this.config), this);
+        Bukkit.getPluginManager().registerEvents(new ProjectileEventListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new BlockEventListener(this), this);
         Bukkit.getPluginManager().registerEvents(new TamingEventListener(), this);
 
         var command = this.getCommand("pvp");
@@ -47,11 +46,22 @@ public final class PacifistsPreference extends JavaPlugin {
         command.setExecutor(commandHandler);
         command.setTabCompleter(commandHandler);
 
+        command = this.getCommand("pvp-reload");
+        Objects.requireNonNull(command);
+        command.setExecutor(new PacifistReloadCommand(this));
+
         if (config.showParticles) {
             getServer().getScheduler().scheduleSyncRepeatingTask(this, this::spawnParticles, 0, 3);
         }
 
         LOGGER.info("Loaded.");
+    }
+
+    public void reload() throws FileNotFoundException {
+        this.saveDefaultConfig();
+
+        final var configFile = new File(this.getDataFolder(), "config.yml");
+        this.config = PacifistConfig.load(configFile);
     }
 
     public void spawnParticles() {
@@ -64,9 +74,5 @@ public final class PacifistsPreference extends JavaPlugin {
                 player.getWorld().spawnParticle(Particle.RAID_OMEN, player.getLocation(), 1, 0.001, 0.001, 0.001, 0.005);
             }
         }
-    }
-
-    public PacifistConfig getConfiguration() {
-        return config;
     }
 }

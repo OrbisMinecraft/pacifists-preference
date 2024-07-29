@@ -4,7 +4,7 @@ package net.orbismc.pacifist.listener;
 
 import net.orbismc.pacifist.PacifistMessaging;
 import net.orbismc.pacifist.PacifistService;
-import net.orbismc.pacifist.config.PacifistConfig;
+import net.orbismc.pacifist.PacifistsPreference;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -14,19 +14,15 @@ import org.bukkit.event.entity.LingeringPotionSplashEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.Set;
 
 public final class ProjectileEventListener implements Listener {
-    private final Set<PotionEffectType> blockedPotionEffects;
-    private final String rule;
+    private final PacifistsPreference plugin;
 
-    public ProjectileEventListener(final @NotNull PacifistConfig config) {
-        this.blockedPotionEffects = config.translatePotionEffectTypes();
-        this.rule = config.blockPotionEffectRule;
+    public ProjectileEventListener(final @NotNull PacifistsPreference plugin) {
+        this.plugin = plugin;
     }
 
     public static Collection<LivingEntity> applyAreaOfEffect(final @NotNull OfflinePlayer attacker, final @NotNull Collection<LivingEntity> affected) {
@@ -66,11 +62,11 @@ public final class ProjectileEventListener implements Listener {
     }
 
     public boolean areEffectsBlocked(final @NotNull Collection<PotionEffect> effects) {
-        if (rule.equalsIgnoreCase("all")) {
-            return effects.stream().allMatch(effect -> blockedPotionEffects.contains(effect.getType()));
+        if (plugin.config.blockPotionEffectRule.equalsIgnoreCase("all")) {
+            return effects.stream().allMatch(effect -> plugin.config.blockedPotionEffects.contains(effect.getType()));
         }
 
-        return effects.stream().anyMatch(effect -> blockedPotionEffects.contains(effect.getType()));
+        return effects.stream().anyMatch(effect -> plugin.config.blockedPotionEffects.contains(effect.getType()));
     }
 
     @EventHandler(ignoreCancelled = true)

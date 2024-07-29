@@ -6,12 +6,17 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Tameable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public final class PacifistMessaging {
+    public static void sendChatMessage(CommandSender sender, String message) {
+        sender.sendMessage("§4[§cPP§4]§r " + message);
+    }
+
     public static void sendAttackDenialMessage(OfflinePlayer attacker, OfflinePlayer target, Entity attackerProxy, Entity targetProxy) {
         if (!attacker.isOnline()) {
             return;

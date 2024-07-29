@@ -9,13 +9,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class PacifistPlaceholders extends PlaceholderExpansion {
     private final PacifistsPreference plugin;
-    private final String placeholderEnabled;
-    private final String placeholderDisabled;
 
     public PacifistPlaceholders(@NotNull PacifistsPreference plugin) {
         this.plugin = plugin;
-        this.placeholderDisabled = plugin.getConfiguration().placeholderPvpDisabled;
-        this.placeholderEnabled = plugin.getConfiguration().placeholderPvpEnabled;
     }
 
     @Override
@@ -49,6 +45,6 @@ public class PacifistPlaceholders extends PlaceholderExpansion {
             return "";
         }
 
-        return PacifistService.isPvpEnabled(onlinePlayer) ? placeholderEnabled : placeholderDisabled;
+        return PacifistService.isPvpEnabled(onlinePlayer) ? plugin.config.placeholderPvpEnabled : plugin.config.placeholderPvpDisabled;
     }
 }

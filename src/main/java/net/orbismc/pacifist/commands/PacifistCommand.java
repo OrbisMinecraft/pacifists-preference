@@ -42,7 +42,7 @@ public final class PacifistCommand implements CommandExecutor, TabCompleter {
 
         player.sendMessage(ChatColor.RED + " PvP is now " + (toggle ? ChatColor.RED + "" + ChatColor.BOLD + "ON" : ChatColor.GREEN + "" + ChatColor.BOLD + "OFF"));
 
-        if (plugin.getConfiguration().showGlowing) {
+        if (plugin.config.showGlowing) {
             player.setGlowing(toggle);
         }
         return true;
