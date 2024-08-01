@@ -17,15 +17,15 @@ This plugin handles the following player interactions:
 | Dangerous Entities    | - TNT and TNT minecarts ignited / placed by another player<br/>- End crystals placed / detonated by another player                                                                           | - Cannot account for these entities being placed using dispensers<br/>- Uses a best-effort system to figure out who caused damage to be dealt (either the player who spawned the entity or the player who caused it ignition/explosion)             | —                                        |
 
 
-## Permissions
-
-This plugin exposes one permission for using the `/pvp` command: `pacifistspreference.use`. It is recommended
-to give all access to this permission.
-
 ## Commands
 
-Only one command is exposed by this plugin: `/pvp`. Its usage is very simple:
+The following commands are exposed by the plugin:
 
-* `/pvp` to toggle between PvP states (on and off)
-* `/pvp on` to enable PvP participation
-* `/pvp off` to disable PvP participation
+| Command               | Permission                   | Description                                                  |
+|-----------------------|------------------------------|--------------------------------------------------------------|
+| `/pvp`                | `pacifistspreference.use`    | Toggle between PvP states (on and off)                       |
+| `/pvp on`             | `pacifistspreference.use`    | Enable PvP participation for the player running the command  |
+| `/pvp off`            | `pacifistspreference.use`    | Disable PvP participation for the player running the command |
+| `/pvp on PlayerName`  | `pacifistspreference.other`  | Enable PvP participation for another player                  |
+| `/pvp off PlayerName` | `pacifistspreference.other`  | Disable PvP participation for another player                 |
+| `/pvp-reload`         | `pacifistspreference.reload` | Reload the configuration of the plugin                       |

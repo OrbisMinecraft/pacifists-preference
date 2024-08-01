@@ -16,6 +16,7 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 public final class PacifistsPreference extends JavaPlugin {
+    public static final String PERMISSION_OTHERS = "pacifistspreference.other";
     public static Logger LOGGER;
     public PacifistConfig config = new PacifistConfig();
 

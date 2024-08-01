@@ -11,6 +11,16 @@ prefix: "PacifistsPreference"
 main: net.orbismc.pacifist.PacifistsPreference
 api-version: '1.21'
 softdepend: [PlaceholderAPI]
+permissions:
+  "pacifistspreference.use":
+    description: The permission required to set your own PvP state
+    default: true
+  "pacifistspreference.reload":
+    description: The permission required to re-load the plugin's configuration
+    default: op
+  "pacifistspreference.other":
+    description: The permission required to set other player's PvP state
+    default: op
 commands:
   pvp:
     description: Toggle PvP on or off

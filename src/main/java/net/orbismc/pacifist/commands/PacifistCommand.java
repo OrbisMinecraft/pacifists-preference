@@ -2,9 +2,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 package net.orbismc.pacifist.commands;
 
+import net.orbismc.pacifist.PacifistMessaging;
 import net.orbismc.pacifist.PacifistService;
 import net.orbismc.pacifist.PacifistsPreference;
-import org.bukkit.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -38,9 +39,22 @@ public final class PacifistCommand implements CommandExecutor, TabCompleter {
             }
         }
 
-        PacifistService.setPvpEnabled(player, toggle);
+        var canChangeOtherState = commandSender.hasPermission(PacifistsPreference.PERMISSION_OTHERS);
+        if (args.length == 2 && canChangeOtherState) {
+            player = Bukkit.getPlayer(args[1]);
+            if (player == null) {
+                PacifistMessaging.sendChatMessage(commandSender, "§cPlayer not found");
+                return true;
+            }
 
-        player.sendMessage(ChatColor.RED + " PvP is now " + (toggle ? ChatColor.RED + "" + ChatColor.BOLD + "ON" : ChatColor.GREEN + "" + ChatColor.BOLD + "OFF"));
+            player.sendMessage("§cPvP has been " + (toggle ? "§c§lENABLED" : "§a§lDISABLED") + " §r§cby a moderator");
+        } else if (args.length == 2) {
+            player.sendMessage("§cYou do not have permission to change another player's PvP state");
+            return true;
+        }
+
+        PacifistService.setPvpEnabled(player, toggle);
+        commandSender.sendMessage("§cPvP is now " + (toggle ? "§c§lENABLED" : "§a§lDISABLED") + " §r§cfor " + player.getDisplayName());
 
         if (plugin.config.showGlowing) {
             player.setGlowing(toggle);
@@ -52,6 +66,11 @@ public final class PacifistCommand implements CommandExecutor, TabCompleter {
     public @Unmodifiable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
         if (args.length == 1) {
             return List.of("on", "off");
+        }
+
+        if (args.length == 2 && sender.hasPermission(PacifistsPreference.PERMISSION_OTHERS)) {
+            // Auto-complete player names
+            return null;
         }
 
         return List.of();
